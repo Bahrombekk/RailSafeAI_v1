@@ -1,0 +1,71 @@
+# RailSafe AI Monitoring System Configuration
+
+# Model sozlamalari
+model:
+  path: "/home/bahrombek/Desktop/RailSafeAI_v1/models/car_detect.onnx"
+  target_classes: [0]  # 0: car, 2: truck, 3: bus, 5: train, 7: motorcycle
+  class_names:
+    0: "car"
+
+
+# Vaqt chegaralari (soniyalarda)
+thresholds:
+  warning: 4.0      # Ogohlantirish (sariq)
+  violation: 6.0    # Qoida buzilishi (qizil)
+
+# Ishlash parametrlari
+processing:
+  # 🚀 ADAPTIVE MODE - Avtomatik tezlik optimizatsiyasi
+  adaptive_mode: true  # true = avtomatik, false = qo'lda
+  frame_skip_idle: 2   # Hech narsa yo'q bo'lsa: har 2-frameda (RESURS TEJASH)
+  frame_skip_active: 1 # Avtomobil detect qilsa: har frameda (REAL-TIME)
+  
+  # Eski usul (adaptive_mode: false bo'lsa ishlaydi)
+  process_every_n_frames: 1  # Har bir frameni ishlash (1 = hammasi, 2 = har ikkinchi)
+  
+  polygon_length: 8.0        # Polygon uzunligi (metrda)
+
+# Kameralar ro'yxati
+cameras:
+  - id: 1
+    name: "Shimoliy Yo'nalish"
+    source: "/home/bahrombek/Desktop/RailSafeAI_v1/videos/video_2025-10-04_15-11-57.mp4"
+    polygon_file: "/home/bahrombek/Desktop/RailSafeAI_v1/polygons/paligon7.json"
+    enabled: true
+  
+  - id: 2
+    name: "Janubiy Yo'nalish"
+    source: "/home/bahrombek/Desktop/RailSafeAI_v1/videos/video_2025-10-04_10-26-00.mp4"
+    polygon_file: "/home/bahrombek/Desktop/RailSafeAI_v1/polygons/paligon5.json"
+    enabled: true
+  
+  - id: 3
+    name: "Sharqiy Yo'nalish"
+    source: "/home/bahrombek/Desktop/RailSafeAI_v1/videos/video.mp4"
+    polygon_file: "/home/bahrombek/Desktop/RailSafeAI_v1/polygons/paligon10.json"
+    enabled: true
+  
+  - id: 4
+    name: "G'arbiy Yo'nalish"
+    source: "/home/bahrombek/Desktop/RailSafeAI_v1/videos/video_2025-10-04_10-26-00.mp4"
+    polygon_file: "/home/bahrombek/Desktop/RailSafeAI_v1/polygons/paligon5.json"
+    enabled: false
+
+# Video saqlash sozlamalari
+video:
+  codec: "XVID"
+  save_full_recording: true  # To'liq videodan saqlash
+
+# Rasm saqlash sozlamalari
+image:
+  save_on_enter: true        # Kirishda rasm saqlash
+  save_on_violation: true    # Buzilishda rasm saqlash
+  quality: 85                # JPEG sifati (0-100)
+
+# GPU sozlamalari
+use_gpu: true
+
+# Hisobot sozlamalari
+reports:
+  generate_on_exit: true     # Dastur yopilganda hisobot yaratish
+  detailed_stats: true       # Batafsil statistika
